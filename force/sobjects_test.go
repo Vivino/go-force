@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/talkinjitsu/go-force/sobjects"
+	"github.com/Vivino/go-force/sobjects"
 )
 
 const (

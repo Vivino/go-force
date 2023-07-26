@@ -3,7 +3,7 @@ package force
 import (
 	"testing"
 
-	"github.com/talkinjitsu/go-force/sobjects"
+	"github.com/Vivino/go-force/sobjects"
 )
 
 func TestCreateWithAccessToken(t *testing.T) {
