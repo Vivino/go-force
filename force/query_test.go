@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/talkinjitsu/go-force/sobjects"
+	"github.com/Vivino/go-force/sobjects"
 )
 
 const (

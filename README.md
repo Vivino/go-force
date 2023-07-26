@@ -15,8 +15,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/talkinjitsu/go-force/force"
-	"github.com/talkinjitsu/go-force/sobjects"
+	"github.com/Vivino/go-force/force"
+	"github.com/Vivino/go-force/sobjects"
 )
 
 type SomeCustomSObject struct {
@@ -73,5 +73,5 @@ func main() {
 
 ## Documentation
 
-* [Package Reference](http://godoc.org/github.com/talkinjitsu/go-force/force)
+* [Package Reference](http://godoc.org/github.com/Vivino/go-force/force)
 * [Force.com API Reference](http://www.salesforce.com/us/developer/docs/api_rest/)
