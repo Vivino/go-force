@@ -2,6 +2,7 @@ package force
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/url"
 	"strings"
@@ -75,7 +76,14 @@ func (forceAPI *API) DescribeSObject(in SObject) (resp *SObjectDescription, err 
 
 // GetSObject fetches the sobject
 func (forceAPI *API) GetSObject(id string, fields []string, out SObject) (err error) {
-	uri := strings.Replace(forceAPI.apiSObjects[out.APIName()].URLs[rowTemplateKey], idKey, id, 1)
+	if out.APIName() == "" {
+		return errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[out.APIName()]
+	if !ok {
+		return fmt.Errorf("missing apiSObj: %q", out.APIName())
+	}
+	uri := strings.Replace(apiSObj.URLs[rowTemplateKey], idKey, id, 1)
 
 	params := url.Values{}
 	if len(fields) > 0 {
@@ -117,7 +125,14 @@ func (forceAPI *API) DeleteSObject(id string, in SObject) (err error) {
 
 // GetSObjectByExternalID get a SObject external ID
 func (forceAPI *API) GetSObjectByExternalID(id string, fields []string, out SObject) (err error) {
-	uri := fmt.Sprintf("%v/%v/%v", forceAPI.apiSObjects[out.APIName()].URLs[sObjectKey],
+	if out.APIName() == "" {
+		return errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[out.APIName()]
+	if !ok {
+		return fmt.Errorf("missing apiSObj: %q", out.APIName())
+	}
+	uri := fmt.Sprintf("%v/%v/%v", apiSObj.URLs[sObjectKey],
 		out.ExternalIDAPIName(), id)
 
 	params := url.Values{}
