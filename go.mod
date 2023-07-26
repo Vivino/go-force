@@ -1,4 +1,4 @@
-module github.com/talkinjitsu/go-force
+module github.com/Vivino/go-force
 
 go 1.13
 
