@@ -32,6 +32,12 @@ func (forceAPI *API) DescribeSObjects() (map[string]*SObjectMetaData, error) {
 
 // DescribeSObject returns the Sobject
 func (forceAPI *API) DescribeSObject(in SObject) (resp *SObjectDescription, err error) {
+	if forceAPI == nil {
+		return nil, errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return nil, errors.New("missing APIName")
+	}
 	// Check cache
 	resp, ok := forceAPI.apiSObjectDescriptions[in.APIName()]
 	if !ok {
@@ -76,6 +82,9 @@ func (forceAPI *API) DescribeSObject(in SObject) (resp *SObjectDescription, err 
 
 // GetSObject fetches the sobject
 func (forceAPI *API) GetSObject(id string, fields []string, out SObject) (err error) {
+	if forceAPI == nil {
+		return errors.New("client is nil")
+	}
 	if out.APIName() == "" {
 		return errors.New("missing APIName")
 	}
@@ -97,7 +106,17 @@ func (forceAPI *API) GetSObject(id string, fields []string, out SObject) (err er
 
 // InsertSObject insert a SObject
 func (forceAPI *API) InsertSObject(in SObject) (resp *SObjectResponse, err error) {
-	uri := forceAPI.apiSObjects[in.APIName()].URLs[sObjectKey]
+	if forceAPI == nil {
+		return nil, errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return nil, errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[in.APIName()]
+	if !ok {
+		return nil, fmt.Errorf("missing apiSObj: %q", in.APIName())
+	}
+	uri := apiSObj.URLs[sObjectKey]
 
 	resp = &SObjectResponse{}
 	err = forceAPI.Post(uri, nil, in.(interface{}), resp)
@@ -107,7 +126,17 @@ func (forceAPI *API) InsertSObject(in SObject) (resp *SObjectResponse, err error
 
 // UpdateSObject update a SObject
 func (forceAPI *API) UpdateSObject(id string, in SObject) (err error) {
-	uri := strings.Replace(forceAPI.apiSObjects[in.APIName()].URLs[rowTemplateKey], idKey, id, 1)
+	if forceAPI == nil {
+		return errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[in.APIName()]
+	if !ok {
+		return fmt.Errorf("missing apiSObj: %q", in.APIName())
+	}
+	uri := strings.Replace(apiSObj.URLs[rowTemplateKey], idKey, id, 1)
 
 	err = forceAPI.Patch(uri, nil, in.(interface{}), nil)
 
@@ -116,7 +145,17 @@ func (forceAPI *API) UpdateSObject(id string, in SObject) (err error) {
 
 // DeleteSObject delete a SObject
 func (forceAPI *API) DeleteSObject(id string, in SObject) (err error) {
-	uri := strings.Replace(forceAPI.apiSObjects[in.APIName()].URLs[rowTemplateKey], idKey, id, 1)
+	if forceAPI == nil {
+		return errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[in.APIName()]
+	if !ok {
+		return fmt.Errorf("missing apiSObj: %q", in.APIName())
+	}
+	uri := strings.Replace(apiSObj.URLs[rowTemplateKey], idKey, id, 1)
 
 	err = forceAPI.Delete(uri, nil)
 
@@ -125,6 +164,9 @@ func (forceAPI *API) DeleteSObject(id string, in SObject) (err error) {
 
 // GetSObjectByExternalID get a SObject external ID
 func (forceAPI *API) GetSObjectByExternalID(id string, fields []string, out SObject) (err error) {
+	if forceAPI == nil {
+		return errors.New("client is nil")
+	}
 	if out.APIName() == "" {
 		return errors.New("missing APIName")
 	}
@@ -147,7 +189,17 @@ func (forceAPI *API) GetSObjectByExternalID(id string, fields []string, out SObj
 
 // UpsertSObjectByExternalID update a SObject external ID
 func (forceAPI *API) UpsertSObjectByExternalID(id string, in SObject) (resp *SObjectResponse, err error) {
-	uri := fmt.Sprintf("%v/%v/%v", forceAPI.apiSObjects[in.APIName()].URLs[sObjectKey],
+	if forceAPI == nil {
+		return nil, errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return nil, errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[in.APIName()]
+	if !ok {
+		return nil, fmt.Errorf("missing apiSObj: %q", in.APIName())
+	}
+	uri := fmt.Sprintf("%v/%v/%v", apiSObj.URLs[sObjectKey],
 		in.ExternalIDAPIName(), id)
 
 	resp = &SObjectResponse{}
@@ -158,7 +210,17 @@ func (forceAPI *API) UpsertSObjectByExternalID(id string, in SObject) (resp *SOb
 
 // DeleteSObjectByExternalID delete a SObject external ID
 func (forceAPI *API) DeleteSObjectByExternalID(id string, in SObject) (err error) {
-	uri := fmt.Sprintf("%v/%v/%v", forceAPI.apiSObjects[in.APIName()].URLs[sObjectKey],
+	if forceAPI == nil {
+		return errors.New("client is nil")
+	}
+	if in.APIName() == "" {
+		return errors.New("missing APIName")
+	}
+	apiSObj, ok := forceAPI.apiSObjects[in.APIName()]
+	if !ok {
+		return fmt.Errorf("missing apiSObj: %q", in.APIName())
+	}
+	uri := fmt.Sprintf("%v/%v/%v", apiSObj.URLs[sObjectKey],
 		in.ExternalIDAPIName(), id)
 
 	err = forceAPI.Delete(uri, nil)
